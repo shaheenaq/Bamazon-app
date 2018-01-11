@@ -1,3 +1,4 @@
+
 var inquirer = require("inquirer");
 var mysql = require("mysql");
 
@@ -38,8 +39,8 @@ function start(){
 function findItem(){
 
 	function validateNumber(num){
-					var reg = /^\d+$/;
-					return reg.test(num) || "Enter Numbers only!";
+		var reg = /^\d+$/;
+		return reg.test(num) || "Enter Numbers only!";
 	}
 
 	inquirer.prompt([
@@ -57,15 +58,16 @@ function findItem(){
 				validate: validateNumber
 			}
 		]).then(function(answer){
-			console.log(answer.choice);
-			console.log(answer.quantity);
+			// console.log(answer.choice);
+			// console.log(answer.quantity);
 
 			connection.query("SELECT * FROM products WHERE ?", { item_id: answer.choice}, function(err,res){
 				var customer_item_id = res[0].item_id; 
 				var customer_quantity = answer.quantity;
 				var total_price = customer_quantity * res[0].price;
-				console.log(res[0].product_name);
-				console.log(res[0].stock_quantity);
+				var product_total = res[0].product_sales + total_price;
+				// console.log(res[0].product_name);
+				// console.log(res[0].stock_quantity);
 
 				if(answer.quantity > res[0].stock_quantity){
 					console.log("Insufficient quantity! Sorry cannot order product!");
@@ -73,12 +75,13 @@ function findItem(){
 				}
 				else if(answer.quantity <= res[0].stock_quantity){
 					var updated_quantity = res[0].stock_quantity - answer.quantity;
-					var query = "UPDATE products SET stock_quantity = ? WHERE item_id = ?";
-					connection.query(query, [updated_quantity, customer_item_id], function(err, result){
+					var query = "UPDATE products SET stock_quantity = ?, product_sales = ? WHERE item_id = ?";
+					connection.query(query, [updated_quantity, product_total, customer_item_id], function(err, result){
 						console.log(`${result.affectedRows} products updated`);
 						console.log("Your order has been placed!");
 						console.log(res[0].product_name);
-						console.log(total_price);
+						console.log("Total: $" + total_price);
+						restart();
 					});
 					
 

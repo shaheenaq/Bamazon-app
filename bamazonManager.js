@@ -25,7 +25,7 @@ function start(){
 		message: "What would you like to do?",
 		type: "list",
 		name: "task",
-		choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
+		choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Finish"]
 	}).then(function(answer){
 		switch(answer.task){
 			case "View Products for Sale":
@@ -40,6 +40,9 @@ function start(){
 			case "Add New Product":
 				addNew();
 				break;
+			case "Finish":
+				console.log("GoodBye!")
+				connection.end();
 			}
 	});
 }
@@ -52,9 +55,12 @@ function viewAll(){
 		for(var i = 0; i < res.length; i++){
 			values.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
 		}
-		
+		// console.log('\033[2J');
 		console.table(['ID', 'PRODUCT', 'DEPARTMENT', 'PRICE', 'QUANTITY'], values);
+		start();
 		});
+
+	
 }
 
 function viewLow(){
@@ -66,7 +72,9 @@ function viewLow(){
 			values.push([res[i].item_id, res[i].product_name, res[i].stock_quantity]);
 		}
 		console.table(['ID', 'PRODUCT', 'QUANTITY'], values);
+		start();
 	});
+
 }
 
 function viewAdd(){
@@ -92,9 +100,12 @@ function viewAdd(){
 			connection.query(addQuery,[updated_quantity, product_id], function(err, result){
 				console.log(`${result.affectedRows} products updated`);
 				console.log(res[0].product_name + " UPDATED QUANTITY: " + updated_quantity);
+				
+				start();
 			});
 		});
 	});
+	
 }
 
 function addNew(){
@@ -126,9 +137,10 @@ function addNew(){
 
 		connection.query(query,[answer.new_item, answer.new_dept, answer.new_price, answer.new_quantity], function(err, res){
 			console.log("New Product Added!");
+			start();
 		});
 	});
-
+	
 }
 
 
