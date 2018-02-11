@@ -1,6 +1,6 @@
 # Bamazon-app
 
-###This is a *CLI (Command Line Interface)* application that allows the user to interact with a storefront called **Bamazon**.
+### This is a *CLI (Command Line Interface)* application that allows the user to interact with a storefront called **Bamazon**.
 
 There are 3 viewpoints for interaction:
 * Customer view
@@ -15,4 +15,10 @@ The Supervisor view allows the user to view a table of the store categorized int
 
 In the backend the mysql database is updating the inventory of products as these changes take place.
 
-###For demonstration on using the App, look in the screenshots/gif Folder.
+### Tools Used:
+* Node.js
+* Express
+* MySQL / Sequel Pro
+* NPM 
+
+### For demonstration on using the App, look in the screenshots/gif Folder.
